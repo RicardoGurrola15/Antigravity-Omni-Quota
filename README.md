@@ -1,6 +1,6 @@
 # 🌌 Antigravity Omni-Quota
 
-[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](https://github.com/RicardoGurrola15/Antigravity-Omni-Quota)
+[![Version](https://img.shields.io/badge/version-1.1.2-blue.svg)](https://github.com/RicardoGurrola15/Antigravity-Omni-Quota)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Support](https://img.shields.io/badge/Support-PayPal-orange.svg)](https://paypal.me/RicardoGurrola146)
 

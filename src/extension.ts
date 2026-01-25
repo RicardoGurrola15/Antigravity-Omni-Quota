@@ -311,8 +311,19 @@ async function runCheck(
                             const nowCheck = Date.now();
                             models = configData.clientModelConfigs.map((cfg: any) => {
                                 let pct = 0;
-                                if (cfg.quotaInfo?.remainingFraction !== undefined) {
-                                    pct = Math.round(cfg.quotaInfo.remainingFraction * 100);
+                                if (cfg.quotaInfo) {
+                                  // DEBUG: Log the full quotaInfo to understand available fields
+                                  // console.log(`[Omni-Quota] Model ${cfg.label} QuotaInfo:`, JSON.stringify(cfg.quotaInfo, null, 2));
+                                  
+                                  // Prefer precise calculation if limit and usage are present
+                                  if (typeof cfg.quotaInfo.limit === 'number' && typeof cfg.quotaInfo.usage === 'number' && cfg.quotaInfo.limit > 0) {
+                                      const rawPct = ((cfg.quotaInfo.limit - cfg.quotaInfo.usage) / cfg.quotaInfo.limit) * 100;
+                                      pct = Math.round(rawPct); // Keep as integer for UI consistency, or * 10 / 10 for 1 decimal
+                                  } 
+                                  // Fallback to remainingFraction if precise usage data is missing
+                                  else if (cfg.quotaInfo.remainingFraction !== undefined) {
+                                      pct = Math.round(cfg.quotaInfo.remainingFraction * 100);
+                                  }
                                 }
 
                                 let resetStr = getTranslation('unknown', language);

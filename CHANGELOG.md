@@ -2,6 +2,10 @@
 
 All notable changes to the **Antigravity Omni-Quota** extension will be documented in this file.
 
+## [1.1.2] - 2026-01-24
+### Fixed
+- **Percentage Granularity**: Fixed an issue where quotas were shown in 20% steps. Now calculates precise percentages (e.g., 87%) using raw usage/limit data from Antigravity.
+
 ## [1.1.1] - 2026-01-10
 ### Fixed
 - Open VSX activation and license metadata refinement.
