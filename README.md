@@ -10,7 +10,7 @@ Unlike standard tools that only show the current session, **Omni-Quota** acts as
 
 ---
 
-## 🌟 What's New in v1.1.1 (Universal Edition)
+## 🌟 What's New in v1.1.5 (Precision Update)
 
 - **🌍 Full Cross-Platform Support**: Native compatibility with **Windows**, **macOS**, and **Linux** (including WSL).
 - **🛡️ Secure Storage Engine**: Sensitive CSRF tokens are now protected using the VS Code `SecretStorage` (system keychain). No more plaintext tokens.
