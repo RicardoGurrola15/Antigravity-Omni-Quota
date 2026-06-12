@@ -22,6 +22,8 @@ Unlike standard tools that only show the current session, **Omni-Quota** acts as
 ## 🚀 Key Features
 
 - **🚀 Zero-Config Discovery**: Automatic detection of Antigravity's internal API port and CSRF token.
+- **🎯 Surgical Account Tracking**: Reads your IDE's core profile (`google_accounts.json`) to pinpoint your exact active account, bypassing ghost-process confusion.
+- **🕒 Real-Time Precision**: True 0% detection for disabled models, and intelligent `Ready 🟢` states that hide unnecessary countdowns when your quota is fully restored.
 - **🔗 Multi-Account Hub**: Store and monitor all your Antigravity accounts simultaneously. No more logging in and out just to check your limits.
   ![Multi-Account Panel](media/panelmultiaccounts.png)
 
