@@ -1,0 +1,17 @@
+{
+  "timestamp": 1769365809698,
+  "project": "Antigravity Omni-Quota",
+  "activeAccount": "Psic Ricardo Gurrola",
+  "contextUsage": "99.5%",
+  "tokens": "127326 / 128000",
+  "messages": 212,
+  "recent_git_commits": "e1f68b1 fix: granular percentage calculation (v1.1.2)\nebbe221 docs: modernize README for v1.1.1 and rebuild VSIX\n379a0ab chore: bump version to v1.1.1 and include MIT license",
+  "recently_modified_files": [
+    "src/extension.ts",
+    "src/translations.ts",
+    "src/quotaProvider.ts",
+    "src/analyticsService.ts",
+    "src/quotaService.ts"
+  ],
+  "instructions": "Review 'recent_git_commits' and 'recently_modified_files' to understand what was changed recently. Ask the user what they want to continue with."
+}

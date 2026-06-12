@@ -328,7 +328,12 @@ async function runCheck(
 
                                 let resetStr = getTranslation('unknown', language);
                                 let resetMinutes = 0;
-                                if (cfg.quotaInfo?.resetTime) {
+
+                                // ENFORCE: If 100%, there is no countdown
+                                if (pct === 100) {
+                                    resetStr = getTranslation('ready', language);
+                                    resetMinutes = 0;
+                                } else if (cfg.quotaInfo?.resetTime) {
                                     const rt = cfg.quotaInfo.resetTime;
                                     if (typeof rt === 'string' && rt.match(/^\d{4}-\d{2}-\d{2}T/)) {
                                         try {
@@ -353,6 +358,8 @@ async function runCheck(
                                     } else {
                                         resetStr = rt.toString();
                                     }
+                                } else {
+                                    resetStr = '--';
                                 }
 
                                 let resetTimestamp: number | undefined;
@@ -469,6 +476,13 @@ async function updateAllAccountsTimes(accountManager: AccountManager, quotaProvi
                     }
                 } else {
                     newResetStr = getTranslation('ready', language);
+                    
+                    // Auto-Replenishment Logic
+                    // Si el tiempo de reseteo se cumplió, la cuota se restaura automáticamente al 100%.
+                    if (model.percentage !== undefined && model.percentage < 100) {
+                        model.percentage = 100;
+                        accChanged = true;
+                    }
                 }
 
                 if (model.resetTime !== newResetStr) {

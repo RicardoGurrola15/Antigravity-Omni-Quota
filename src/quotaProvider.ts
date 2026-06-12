@@ -1,5 +1,8 @@
 
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
 import { AccountManager, AccountData } from './accountManager';
 import { getTranslation } from './translations';
 
@@ -29,16 +32,36 @@ export class QuotaProvider implements vscode.TreeDataProvider<QuotaItem> {
             const currentAccount = accounts.reduce((prev, curr) => prev.lastActive > curr.lastActive ? prev : curr);
             const config = vscode.workspace.getConfiguration('antigravity-quota');
             const language = config.get('language', 'auto') as string;
+            
+            // Read active account from IDE configuration to prevent ghost process guessing
+            let activeEmail = "";
+            try {
+                const home = os.homedir();
+                const filePath = path.join(home, '.gemini', 'google_accounts.json');
+                if (fs.existsSync(filePath)) {
+                    const content = fs.readFileSync(filePath, 'utf8');
+                    const json = JSON.parse(content);
+                    if (json.active) activeEmail = json.active;
+                }
+            } catch(e) {}
+
             const sortedAccounts = accounts.sort((a, b) => b.lastActive - a.lastActive);
             const accountItems = sortedAccounts.map((acc, index) => {
-                const isCurrent = index === 0; // Most recent is current
-                const currentText = getTranslation('current', language);
-                const label = acc.displayName + (isCurrent ? ` (${currentText})` : '');
+                const isCurrent = activeEmail ? acc.id.endsWith(`_${activeEmail}`) : index === 0; 
+                const label = acc.displayName;
                 const state = vscode.TreeItemCollapsibleState.Collapsed;
-                const icon = isCurrent ? 'pass-filled' : 'account';
+                const icon = isCurrent ? 'pass-filled' : 'history';
                 const modelsCount = acc.models?.length || 0;
                 const modelsText = getTranslation('models', language);
-                const desc = `${modelsCount} ${modelsText}`;
+                
+                const now = Date.now();
+                const diffMins = Math.floor((now - acc.lastActive) / 60000);
+                const diffHrs = Math.floor(diffMins / 60);
+                let timeDiffStr = diffMins < 1 ? "just now" : (diffHrs < 1 ? `${diffMins}m` : `${diffHrs}h`);
+                
+                const statusStr = isCurrent ? 'Live 🟢' : `Cached ⚪ (${timeDiffStr})`;
+                
+                const desc = `${statusStr} • ${modelsCount} ${modelsText}`;
                 return new QuotaItem(label, state, icon, acc, desc);
             });
 
@@ -73,9 +96,8 @@ export class QuotaProvider implements vscode.TreeDataProvider<QuotaItem> {
                 if (showOnlyLowQuota) {
                     modelsToShow = modelsToShow.filter(m => m.percentage < warningThreshold);
                 }
-                // items.push(new QuotaItem("--- Modelos ---", vscode.TreeItemCollapsibleState.None));
                 modelsToShow.forEach(m => {
-                    const mName = m.name || getTranslation('model', lang);
+                    let mName = m.name || getTranslation('model', lang);
                     const mPct = m.percentage ?? 0;
                     const config = vscode.workspace.getConfiguration('antigravity-quota');
                     const warningThreshold = config.get('warningThreshold', 50) as number;
